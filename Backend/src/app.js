@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/authRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 
 const testRoutes = require("./routes/testRoutes");
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.use("/api/test", testRoutes);
 

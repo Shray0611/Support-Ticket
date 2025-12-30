@@ -11,6 +11,11 @@ const {
   getAllTickets
 } = require("../controllers/ticketController");
 
+const {
+  assignTicket,
+  updateTicketStatus
+} = require("../controllers/ticketController");
+
 // User
 router.post("/", authMiddleware, allowRoles("user"), createTicket);
 router.get("/my", authMiddleware, allowRoles("user"), getMyTickets);
@@ -25,5 +30,22 @@ router.get(
 
 // Admin
 router.get("/", authMiddleware, allowRoles("admin"), getAllTickets);
+
+
+// Admin assigns ticket
+router.put(
+  "/:id/assign",
+  authMiddleware,
+  allowRoles("admin"),
+  assignTicket
+);
+
+// Agent/Admin updates status
+router.put(
+  "/:id/status",
+  authMiddleware,
+  allowRoles("agent", "admin","user"),
+  updateTicketStatus
+);
 
 module.exports = router;
