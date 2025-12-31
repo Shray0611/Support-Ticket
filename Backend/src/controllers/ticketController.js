@@ -1,15 +1,24 @@
 const Ticket = require("../models/Ticket");
+const { uploadFile } = require("../services/fileStorage");
 
 // CREATE TICKET (User)
 exports.createTicket = async (req, res) => {
   try {
     const { title, description, category, priority } = req.body;
 
+    let attachments = [];
+    console.log("REQ.FILE =>", req.file);
+    if (req.file) {
+      const uploaded = await uploadFile(req.file);
+      attachments.push(uploaded);
+    }
+
     const ticket = await Ticket.create({
       title,
       description,
       category,
       priority,
+      attachments,
       createdBy: req.user._id
     });
 

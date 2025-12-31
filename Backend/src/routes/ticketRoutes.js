@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
 const allowRoles = require("../middleware/roleMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 const {
   createTicket,
@@ -17,7 +18,13 @@ const {
 } = require("../controllers/ticketController");
 
 // User
-router.post("/", authMiddleware, allowRoles("user"), createTicket);
+router.post(
+  "/",
+  authMiddleware,
+  allowRoles("user"),
+  upload.single("file"),
+  createTicket
+);
 router.get("/my", authMiddleware, allowRoles("user"), getMyTickets);
 
 // Agent
@@ -47,5 +54,6 @@ router.put(
   allowRoles("agent", "admin","user"),
   updateTicketStatus
 );
+
 
 module.exports = router;

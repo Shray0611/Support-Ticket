@@ -34,7 +34,13 @@ const ticketSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null
+    },
+    attachments: [
+    {
+    url: String,
+    publicId: String
     }
+    ],
   },
   { timestamps: true }
 );
