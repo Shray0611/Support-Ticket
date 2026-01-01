@@ -38,15 +38,6 @@ function UserDashboard() {
           ))}
         </div>
       </div>
-      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {tickets.map((ticket) => (
-          <TicketCard
-            key={ticket._id}
-            ticket={ticket}
-            onUpdated={fetchTickets}
-          />
-        ))}
-      </div>
     </>
   );
 }
