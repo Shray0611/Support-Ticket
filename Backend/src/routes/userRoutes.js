@@ -4,7 +4,14 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const allowRoles = require("../middleware/roleMiddleware");
 const User = require("../models/User");
+const { getAgentsWithTicketCount } = require("../controllers/userController");
 
+router.get(
+  "/agents-with-count",
+  authMiddleware,
+  allowRoles("admin"),
+  getAgentsWithTicketCount
+);
 // Admin: get all agents
 router.get(
   "/agents",
