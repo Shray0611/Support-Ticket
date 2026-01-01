@@ -6,6 +6,15 @@ import { getUserFromToken } from "../auth/auth";
 function TicketCard({ ticket, onUpdated, onAssigned }) {
   const user = getUserFromToken();
 
+  const getPriorityColor = (priority) => {
+    const colors = {
+      low: "bg-blue-100 text-blue-800 border-blue-200",
+      medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      high: "bg-red-100 text-red-800 border-red-200",
+    };
+    return colors[priority] || "bg-gray-100 text-gray-800 border-gray-200";
+  };
+
   const getStatusColor = (status) => {
     const colors = {
       open: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -22,12 +31,34 @@ function TicketCard({ ticket, onUpdated, onAssigned }) {
       <div className="p-6">
         <div className="flex justify-between mb-3">
           <h3 className="text-xl font-bold">{ticket.title}</h3>
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(ticket.status)}`}>
+          <span
+            className={`px-3 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
+              ticket.status
+            )}`}
+          >
             {ticket.status.toUpperCase()}
           </span>
         </div>
 
         <p className="text-gray-600 mb-4">{ticket.description}</p>
+        {/* Category & Priority */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {ticket.category && (
+            <span className="px-3 py-1 text-xs font-semibold rounded-full border bg-gray-100 text-gray-800 border-gray-200">
+              Category: {ticket.category}
+            </span>
+          )}
+
+          {ticket.priority && (
+            <span
+              className={`px-3 py-1 text-xs font-semibold rounded-full border ${getPriorityColor(
+                ticket.priority
+              )}`}
+            >
+              Priority: {ticket.priority.toUpperCase()}
+            </span>
+          )}
+        </div>
 
         {user.role === "admin" && ticket.status === "open" && (
           <AssignAgent
