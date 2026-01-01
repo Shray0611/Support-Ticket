@@ -8,7 +8,6 @@ function StatusUpdater({ ticket, onUpdated }) {
     try {
       await api.put(`/tickets/${ticket._id}/status`, { status });
 
-      // 🔑 SAFETY CHECK
       if (onUpdated) {
         onUpdated();
       }
@@ -18,27 +17,44 @@ function StatusUpdater({ ticket, onUpdated }) {
     }
   };
 
-  return (
-    <div className="flex gap-2 mt-3">
-      {user.role === "agent" && ticket.status === "assigned" && (
-        <button onClick={() => updateStatus("in-progress")}>
-          Start
+  const getStatusButton = () => {
+    if (user.role === "agent" && ticket.status === "assigned") {
+      return (
+        <button
+          onClick={() => updateStatus("in-progress")}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm"
+        >
+          Start Working
         </button>
-      )}
+      );
+    }
 
-      {user.role === "agent" && ticket.status === "in-progress" && (
-        <button onClick={() => updateStatus("resolved")}>
-          Resolve
+    if (user.role === "agent" && ticket.status === "in-progress") {
+      return (
+        <button
+          onClick={() => updateStatus("resolved")}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium shadow-sm"
+        >
+          Mark Resolved
         </button>
-      )}
+      );
+    }
 
-      {user.role === "user" && ticket.status === "resolved" && (
-        <button onClick={() => updateStatus("closed")}>
-          Close
+    if (user.role === "user" && ticket.status === "resolved") {
+      return (
+        <button
+          onClick={() => updateStatus("closed")}
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium shadow-sm"
+        >
+          Close Ticket
         </button>
-      )}
-    </div>
-  );
+      );
+    }
+
+    return null;
+  };
+
+  return <div className="mt-3">{getStatusButton()}</div>;
 }
 
 export default StatusUpdater;

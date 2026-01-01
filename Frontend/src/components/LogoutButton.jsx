@@ -5,14 +5,14 @@ function LogoutButton() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();                      // remove token
-    navigate("/", { replace: true }); // force redirect
+    logout();
+    navigate("/", { replace: true });
   };
 
   return (
     <button
       onClick={handleLogout}
-      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+      className="px-5 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-200 font-semibold shadow-md"
     >
       Logout
     </button>

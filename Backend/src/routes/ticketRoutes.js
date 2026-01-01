@@ -10,6 +10,8 @@ const {
   getMyTickets,
   getAssignedTickets,
   getAllTickets,
+  assignTicket,
+  updateTicketStatus
 } = require("../controllers/ticketController");
 
 // User creates ticket
@@ -20,6 +22,19 @@ router.post(
   upload.single("file"), // 🔑 MUST be before controller
   createTicket
 );
+router.put(
+  "/:id/assign",
+  authMiddleware,
+  allowRoles("admin"),
+  assignTicket
+);
+router.put(
+  "/:id/status",
+  authMiddleware,
+  allowRoles("agent", "admin", "user"),
+  updateTicketStatus
+);
+
 
 router.get("/my", authMiddleware, allowRoles("user"), getMyTickets);
 router.get("/assigned", authMiddleware, allowRoles("agent"), getAssignedTickets);

@@ -7,7 +7,7 @@ function AgentDashboard() {
   const [tickets, setTickets] = useState([]);
 
   const fetchTickets = () => {
-    api.get("/tickets/assigned").then(res => setTickets(res.data));
+    api.get("/tickets/assigned").then((res) => setTickets(res.data));
   };
 
   useEffect(() => {
@@ -15,10 +15,11 @@ function AgentDashboard() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <Navbar title="Assigned Tickets" />
-      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {tickets.map(ticket => (
+
+      <div className="max-w-7xl mx-auto p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tickets.map((ticket) => (
           <TicketCard
             key={ticket._id}
             ticket={ticket}
@@ -26,7 +27,7 @@ function AgentDashboard() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
