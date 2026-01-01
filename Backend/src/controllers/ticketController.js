@@ -19,7 +19,7 @@ exports.createTicket = async (req, res) => {
       category,
       priority,
       attachments,
-      createdBy: req.user._id
+      createdBy: req.user._id,
     });
 
     res.status(201).json(ticket);
@@ -31,8 +31,9 @@ exports.createTicket = async (req, res) => {
 // GET USER'S OWN TICKETS
 exports.getMyTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find({ createdBy: req.user._id })
-      .sort({ createdAt: -1 });
+    const tickets = await Ticket.find({ createdBy: req.user._id }).sort({
+      createdAt: -1,
+    });
 
     res.json(tickets);
   } catch (error) {
@@ -43,8 +44,9 @@ exports.getMyTickets = async (req, res) => {
 // GET ASSIGNED TICKETS (Agent)
 exports.getAssignedTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find({ assignedTo: req.user._id })
-      .sort({ createdAt: -1 });
+    const tickets = await Ticket.find({ assignedTo: req.user._id }).sort({
+      createdAt: -1,
+    });
 
     res.json(tickets);
   } catch (error) {
@@ -68,6 +70,7 @@ exports.getAllTickets = async (req, res) => {
 
 // ASSIGN TICKET (Admin)
 exports.assignTicket = async (req, res) => {
+  
   try {
     const { agentId } = req.body;
     const ticketId = req.params.id;
@@ -79,7 +82,7 @@ exports.assignTicket = async (req, res) => {
 
     if (ticket.status !== "open") {
       return res.status(400).json({
-        message: "Only open tickets can be assigned"
+        message: "Only open tickets can be assigned",
       });
     }
 
@@ -92,7 +95,6 @@ exports.assignTicket = async (req, res) => {
     res.status(500).json({ message: "Failed to assign ticket" });
   }
 };
-
 
 // UPDATE TICKET STATUS (Agent/Admin/User for close)
 exports.updateTicketStatus = async (req, res) => {
@@ -110,12 +112,12 @@ exports.updateTicketStatus = async (req, res) => {
       assigned: ["in-progress"],
       "in-progress": ["resolved"],
       resolved: ["closed"],
-      closed: []
+      closed: [],
     };
 
     if (!allowedTransitions[ticket.status].includes(status)) {
       return res.status(400).json({
-        message: `Cannot change status from ${ticket.status} to ${status}`
+        message: `Cannot change status from ${ticket.status} to ${status}`,
       });
     }
 
@@ -125,7 +127,7 @@ exports.updateTicketStatus = async (req, res) => {
       ticket.createdBy.toString() !== req.user._id.toString()
     ) {
       return res.status(403).json({
-        message: "Only ticket owner can close the ticket"
+        message: "Only ticket owner can close the ticket",
       });
     }
 
@@ -137,5 +139,3 @@ exports.updateTicketStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update status" });
   }
 };
-
-

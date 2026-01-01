@@ -8,7 +8,7 @@ exports.uploadFile = async (file) => {
         if (error) return reject(error);
         resolve({
           url: result.secure_url,
-          publicId: result.public_id
+          publicId: result.public_id,
         });
       }
     );

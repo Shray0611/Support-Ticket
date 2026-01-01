@@ -5,17 +5,19 @@ const authRoutes = require("./routes/authRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const testRoutes = require("./routes/testRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
 app.use(cors());
 
 // ❗ DO NOT use express.json() before multer routes
-app.use("/api/tickets", ticketRoutes);
 
 // JSON parsing AFTER multipart routes
 app.use(express.json());
 
+app.use("/api/tickets", ticketRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/test", testRoutes);
