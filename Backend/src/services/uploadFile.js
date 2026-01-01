@@ -3,9 +3,10 @@ const cloudinary = require("../config/cloudinary");
 exports.uploadFile = async (file) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "support-tickets" },
+      { folder: "support-tickets", resource_type: "auto" },
       (error, result) => {
         if (error) return reject(error);
+
         resolve({
           url: result.secure_url,
           publicId: result.public_id,
@@ -13,6 +14,6 @@ exports.uploadFile = async (file) => {
       }
     );
 
-    stream.end(file.buffer); // ✅ FIX
+    stream.end(file.buffer);
   });
 };

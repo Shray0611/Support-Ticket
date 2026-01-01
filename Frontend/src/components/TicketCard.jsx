@@ -24,6 +24,22 @@ function TicketCard({ ticket, onUpdated, onAssigned }) {
       )}
 
       <Comments ticketId={ticket._id} />
+      {ticket.attachments?.length > 0 && (
+        <div className="mt-2">
+          <p className="text-sm font-semibold">Attachments:</p>
+          {ticket.attachments.map((file, i) => (
+            <a
+              key={i}
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline text-sm"
+            >
+              View File
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

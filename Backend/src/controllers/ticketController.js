@@ -1,13 +1,15 @@
-const Ticket = require("../models/Ticket");
-const { uploadFile } = require("../services/fileStorage");
 
-// CREATE TICKET (User)
+const Ticket = require("../models/Ticket");
+const { uploadFile } = require("../services/uploadFile");
+
 exports.createTicket = async (req, res) => {
   try {
     const { title, description, category, priority } = req.body;
 
     let attachments = [];
+
     console.log("REQ.FILE =>", req.file);
+
     if (req.file) {
       const uploaded = await uploadFile(req.file);
       attachments.push(uploaded);
@@ -22,11 +24,13 @@ exports.createTicket = async (req, res) => {
       createdBy: req.user._id,
     });
 
-    res.status(201).json(ticket);
+    return res.status(201).json(ticket);
   } catch (error) {
-    res.status(500).json({ message: "Failed to create ticket" });
+    console.error("CREATE TICKET ERROR:", error);
+    return res.status(500).json({ message: "Failed to create ticket" });
   }
 };
+
 
 // GET USER'S OWN TICKETS
 exports.getMyTickets = async (req, res) => {
