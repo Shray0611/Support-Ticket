@@ -5,13 +5,15 @@ import AgentDashboard from "./pages/AgentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateTicket from "./pages/CreateTicket";
+import Register from "./pages/Register";
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-
+        <Route path="/register" element={<Register />} />
         <Route
           path="/user"
           element={
