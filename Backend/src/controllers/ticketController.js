@@ -100,13 +100,11 @@ exports.assignTicket = async (req, res) => {
   }
 };
 
-// UPDATE TICKET STATUS (Agent/Admin/User for close)
 exports.updateTicketStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const ticketId = req.params.id;
+    const ticket = await Ticket.findById(req.params.id);
 
-    const ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       return res.status(404).json({ message: "Ticket not found" });
     }
@@ -115,31 +113,27 @@ exports.updateTicketStatus = async (req, res) => {
       open: ["assigned"],
       assigned: ["in-progress"],
       "in-progress": ["resolved"],
-      resolved: ["closed"],
-      closed: [],
+      resolved: ["closed", "open"], // 🔑 close OR reopen
+      closed: [], // ❌ final
     };
 
-    if (!allowedTransitions[ticket.status].includes(status)) {
-      return res.status(400).json({
-        message: `Cannot change status from ${ticket.status} to ${status}`,
-      });
+    if (!allowedTransitions[ticket.status]?.includes(status)) {
+      return res.status(400).json({ message: "Invalid status transition" });
     }
 
-    // ONLY TICKET CREATOR CAN CLOSE
-    if (
-      status === "closed" &&
-      ticket.createdBy.toString() !== req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        message: "Only ticket owner can close the ticket",
-      });
+    // 🔑 Reopen logic
+    if (ticket.status === "resolved" && status === "open") {
+      ticket.assignedTo = null; // return to admin pool
     }
 
     ticket.status = status;
     await ticket.save();
 
-    res.json({ message: "Status updated successfully", ticket });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to update status" });
+    res.json({ message: "Status updated", ticket });
+  } catch (err) {
+    res.status(500).json({ message: "Status update failed" });
   }
 };
+
+
+
